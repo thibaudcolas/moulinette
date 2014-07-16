@@ -79,9 +79,7 @@ while (<FILE_IN>) {
   }
 }
 
-use Data::Dumper;
-print Dumper(\%group);
-
+# For each group,
 while (($attrib, $chem) = each(%group)) {
   $diff = max(@{$chem}) - min(@{$chem});
 
@@ -92,9 +90,9 @@ while (($attrib, $chem) = each(%group)) {
       $line = "$line $diff"
     }
 
-    print "$line\n";
+    print FICHIERRES "$line\n";
   }
-  print "\n";
+  print FICHIERRES "\n";
 }
 
 foreach (@ambiguous) {
