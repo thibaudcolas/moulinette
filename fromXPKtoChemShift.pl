@@ -83,9 +83,14 @@ use Data::Dumper;
 print Dumper(\%group);
 
 while (($attrib, $chem) = each(%group)) {
+  $diff = max(@{$chem}) - min(@{$chem});
 
   foreach (@{$chem}) {
     $line = "$attrib $_";
+
+    if ($diff > $threshold) {
+      $line = "$line $diff"
+    }
 
     print "$line\n";
   }
