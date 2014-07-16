@@ -3,6 +3,13 @@
 # - Compare les valeurs de déplacement chimique pour un atome donné et alerte
 # si l'étendue (max - min) est supérieure à un seuil choisi.
 #
+# Évolution :
+# - Pour chaque ligne / déplacement chimique (chem), afficher son origine (chem 1 ou 2).
+# - Pour chaque proton (attrib), afficher l'étendue pour les deux origines confondues.
+# - Pour chaque origine, afficher l'étendue des déplacements de l'origine.
+# - Pour chaque origine, afficher une étoile si le seuil est dépassé.
+# - Si le seuil origines confondues est dépassé, afficher une étoile pour les deux.
+# - Classer les protons par numéro
 
 use List::Util qw( min max );
 
