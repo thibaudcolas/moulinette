@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-#1/transforme un fichier de pics attribues  NMRVIEW en fichier de peaks compatible CYANA
+#1/transforme un fichier de pics attribues  NMRVIEW en fichier de peaks compatible Aria
 #2/
 #        ouvrenput
 #
