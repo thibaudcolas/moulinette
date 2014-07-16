@@ -14,7 +14,7 @@ else {
   exit;
 }
 
-open(FILE_IN,$input);
+open(FILE_IN, $input);
 
 # Récupération du nom du fichier de sortie
 use File::Basename;
@@ -79,7 +79,15 @@ while (<FILE_IN>) {
 
   print  "\n coucou2 $numpeak $attrib1 $chem1 $error1 $inc1 $inc2 $inc3 $inc4 $attrib2 $chem2 $error2 $inc5 $inc6 $inc7 $inc8  $vol $int $inc9 $inc10 $inc11";
 
-  print FICHIERRES "\n $numpeak $attrib1 $chem1 $error1 0.04 $inc2 $inc3 $inc4 $attrib2 $chem2 $error2  0.04 $inc6 $inc7 $inc8  $vol $int $inc9 $inc10 $inc11";
+  # On ignore l'entête du fichier et elle est reproduite telle quelle.
+  if ($compteur < 7) {
+    $lineoutput = $_;
+  }
+  else {
+    $lineoutput = "$numpeak $attrib1 $chem1 $error1 0.04 $inc2 $inc3 $inc4 $attrib2 $chem2 $error2  0.04 $inc6 $inc7 $inc8  $vol $int $inc9 $inc10 $inc11\n";
+  }
+
+  print FICHIERRES $lineoutput;
 }
 
 close FILE_IN;
