@@ -16,9 +16,14 @@ else {
 
 open(FILE_IN,$input);
 
+# Récupération du nom du fichier de sortie
+use File::Basename;
+$inputfile = basename($input);
+(my $outputfile = $inputfile) =~ s/.xpk/-out.xpk/;
+
 # Création du fichier de sortie.
-system("rm out.xpk");
-open(FICHIERRES,">>out.xpk") or die "ne peut pas ouvrir le fichier out.aco!";
+system ("rm $outputfile");
+open(FICHIERRES,">>$outputfile") or die "ne peut pas ouvrir le fichier $outputfile!";
 
 $compteur = 0;
 
