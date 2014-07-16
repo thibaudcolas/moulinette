@@ -1,17 +1,21 @@
 #!/usr/bin/perl
 #1/transforme un fichier de pics attribues  NMRVIEW en fichier de peaks compatible CYANA
-#2/ 
-#        ouvrenput 
-#        
+#2/
+#        ouvrenput
+#
 #
 # le fichier resultat= out.xpk
 
 if ($ARGV[0]) { $input = $ARGV[0]; }
 else { print " usage : fromXplortodyanaang.pl TOTOINPUT.xpk \n"; exit; }
 
+use File::Basename;
+$inputfile = basename($input);
+(my $outputfile = $inputfile) =~ s/.xpk/-out.xpk/;
+
 open(FILE_IN,$input);
-system ("rm out.xpk");
-open(FICHIERRES,">>out.xpk") or die "ne peut pas ouvrir le fichier out.aco!";
+system ("rm $outputfile");
+open(FICHIERRES,">>$outputfile") or die "ne peut pas ouvrir le fichier $outputfile!";
           $compteur= 0;
 @ALA=(3,15);
 @ILE=(11,12);
@@ -34,8 +38,8 @@ open(FICHIERRES,">>out.xpk") or die "ne peut pas ouvrir le fichier out.aco!";
 @HIS=();
 @THR=();
 while(<FILE_IN>)
-        
-{       
+
+{
          @ligne= split(" ",$_);
           $compteur= $compteur +1;
           $numpeak = @ligne[0];
@@ -56,7 +60,7 @@ while(<FILE_IN>)
           $valid= @ligne[15];
 
          if ($attrib1 ne "?")  {
-         @tamp1= split (/\./,"$attrib1"); 
+         @tamp1= split (/\./,"$attrib1");
         $res1=@tamp1[0];
          $res1=~s/\{//;
          $atom1=@tamp1[1];
@@ -73,7 +77,7 @@ foreach $myres (@LEU,@SER,@CYS,@PHE,@TYR,@TRP,@LYS,@ARG,@MET,@PRO,@HIS,@ASP,@GLU
 }
 
  foreach $myres (@LYS,@PRO,@ASP,@GLU,@GLN)
-{ 
+{
   if ($res1 == $myres) {
   $atom1=&QHGtoQG($atom1);
   $atom1=&QHDtoQD($atom1);
@@ -81,7 +85,7 @@ foreach $myres (@LEU,@SER,@CYS,@PHE,@TYR,@TRP,@LYS,@ARG,@MET,@PRO,@HIS,@ASP,@GLU
 }
 
  foreach $myres (@ARG)
-{ 
+{
   if ($res1 == $myres) {
   $atom1=&QHGtoQG($atom1);
   $atom1=&QHDtoQD($atom1);}
@@ -156,7 +160,7 @@ foreach $myres (@PHE)
 
 }
          if ($attrib2 ne "?")  {
-         @tamp2= split(/\./,$attrib2); 
+         @tamp2= split(/\./,$attrib2);
          $res2=@tamp2[0];
          $res2=~s/\{//;
          print "\ res2 $res2";
@@ -173,7 +177,7 @@ foreach $myres (@LEU,@SER,@CYS,@PHE,@TYR,@TRP,@LYS,@ARG,@MET,@PRO,@HIS,@ASP,@GLU
 }
 
  foreach $myres (@LYS,@PRO,@ASP,@GLU,@GLN)
-{ 
+{
   if ($res2 == $myres) {
   $atom2=&QHGtoQG($atom2);
   $atom2=&QHDtoQD($atom2);
@@ -181,7 +185,7 @@ foreach $myres (@LEU,@SER,@CYS,@PHE,@TYR,@TRP,@LYS,@ARG,@MET,@PRO,@HIS,@ASP,@GLU
 }
 
  foreach $myres (@ARG)
-{ 
+{
   if ($res2 == $myres) {
   $atom2=&QHGtoQG($atom2);
   $atom2=&QHDtoQD($atom2);}
@@ -255,7 +259,7 @@ foreach $myres (@LYS,@ARG,@PRO,@GLU,@GLN,@MET)
 }
 
 
-} 
+}
 
 if ($atom2 eq "HN") {$atom2="H";}
 if ($atom2 eq "N") {$atom2="H";}
@@ -266,148 +270,148 @@ if ($attrib1 ne "?") {$attrib1 = "{".$res1.".".$atom1."}";}
 if ($attrib2 ne "?") {$attrib2 = "{".$res2.".".$atom2."}";}
 
 
-          print  "\n coucou2 $numpeak $attrib1 $chem1 $error1 $inc1 $inc2 $inc3 $inc4 $attrib2 $chem2 $error2 $inc5 $inc6 $inc7 $inc8  $vol $int $inc9 $inc10 $inc11"; 
+          print  "\n coucou2 $numpeak $attrib1 $chem1 $error1 $inc1 $inc2 $inc3 $inc4 $attrib2 $chem2 $error2 $inc5 $inc6 $inc7 $inc8  $vol $int $inc9 $inc10 $inc11";
 
-          print FICHIERRES "\n $numpeak $attrib1 $chem1 $error1 0.04 $inc2 $inc3 $inc4 $attrib2 $chem2 $error2  0.04 $inc6 $inc7 $inc8  $vol $int $inc9 $inc10 $inc11"; 
+          print FICHIERRES "\n $numpeak $attrib1 $chem1 $error1 0.04 $inc2 $inc3 $inc4 $attrib2 $chem2 $error2  0.04 $inc6 $inc7 $inc8  $vol $int $inc9 $inc10 $inc11";
           }
 close FILE_IN;
 close FICHIERRES;
- 
+
 sub HB1HB2 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HB2") { $iciatom1 = "HB3";} 
-           if ( $iciatom1 eq "HB1") { $iciatom1 = "HB2";} 
+           if ( $iciatom1 eq "HB2") { $iciatom1 = "HB3";}
+           if ( $iciatom1 eq "HB1") { $iciatom1 = "HB2";}
            $iciatom1;
            }
 
 sub HG1HG2 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HG2") { $iciatom1 = "HG3";} 
-           if ( $iciatom1 eq "HG1") { $iciatom1 = "HG2";} 
+           if ( $iciatom1 eq "HG2") { $iciatom1 = "HG3";}
+           if ( $iciatom1 eq "HG1") { $iciatom1 = "HG2";}
            $iciatom1;
            }
- 
+
 sub HG21HG22HG23 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HG21") { $iciatom1 = "QG2";} 
-           if ( $iciatom1 eq "HG22") { $iciatom1 = "QG2";} 
-           if ( $iciatom1 eq "HG23") { $iciatom1 = "QG2";} 
+           if ( $iciatom1 eq "HG21") { $iciatom1 = "QG2";}
+           if ( $iciatom1 eq "HG22") { $iciatom1 = "QG2";}
+           if ( $iciatom1 eq "HG23") { $iciatom1 = "QG2";}
            $iciatom1;
            }
 
 sub HD11toQD1 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HD11") { $iciatom1 = "QD1";} 
-           if ( $iciatom1 eq "HD12") { $iciatom1 = "QD1";} 
-           if ( $iciatom1 eq "HD13") { $iciatom1 = "QD1";} 
+           if ( $iciatom1 eq "HD11") { $iciatom1 = "QD1";}
+           if ( $iciatom1 eq "HD12") { $iciatom1 = "QD1";}
+           if ( $iciatom1 eq "HD13") { $iciatom1 = "QD1";}
            $iciatom1;
            }
 
 sub QDtoQD1 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "QD") { $iciatom1 = "QD1";} 
+           if ( $iciatom1 eq "QD") { $iciatom1 = "QD1";}
            $iciatom1;
            }
 
 sub HD11HD12HD13 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HD11") { $iciatom1 = "QD1";} 
-           if ( $iciatom1 eq "HD12") { $iciatom1 = "QD1";} 
-           if ( $iciatom1 eq "HD13") { $iciatom1 = "QD1";} 
+           if ( $iciatom1 eq "HD11") { $iciatom1 = "QD1";}
+           if ( $iciatom1 eq "HD12") { $iciatom1 = "QD1";}
+           if ( $iciatom1 eq "HD13") { $iciatom1 = "QD1";}
            $iciatom1;
            }
 
 sub HD21HD22HD23 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HD21") { $iciatom1 = "QD2";} 
-           if ( $iciatom1 eq "HD22") { $iciatom1 = "QD2";} 
-           if ( $iciatom1 eq "HD23") { $iciatom1 = "QD2";} 
+           if ( $iciatom1 eq "HD21") { $iciatom1 = "QD2";}
+           if ( $iciatom1 eq "HD22") { $iciatom1 = "QD2";}
+           if ( $iciatom1 eq "HD23") { $iciatom1 = "QD2";}
            $iciatom1;
            }
 
 sub HD1HD2toQD1QD2 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HD1") { $iciatom1 = "QD1";} 
-           if ( $iciatom1 eq "HD2") { $iciatom1 = "QD2";} 
+           if ( $iciatom1 eq "HD1") { $iciatom1 = "QD1";}
+           if ( $iciatom1 eq "HD2") { $iciatom1 = "QD2";}
            $iciatom1;
            }
 
 sub HD21H212HD23 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HD21") { $iciatom1 = "QD2";} 
-           if ( $iciatom1 eq "HD22") { $iciatom1 = "QD2";} 
-           if ( $iciatom1 eq "HD23") { $iciatom1 = "QD2";} 
+           if ( $iciatom1 eq "HD21") { $iciatom1 = "QD2";}
+           if ( $iciatom1 eq "HD22") { $iciatom1 = "QD2";}
+           if ( $iciatom1 eq "HD23") { $iciatom1 = "QD2";}
            $iciatom1;
            }
 
 sub HG11HG12 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HG11") { $iciatom1 = "HG12";} 
-           if ( $iciatom1 eq "HG12") { $iciatom1 = "HG13";} 
+           if ( $iciatom1 eq "HG11") { $iciatom1 = "HG12";}
+           if ( $iciatom1 eq "HG12") { $iciatom1 = "HG13";}
            $iciatom1;
            }
 
 sub HA1HA2 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HA2") { $iciatom1 = "HA3";} 
-           if ( $iciatom1 eq "HA1") { $iciatom1 = "HA2";} 
+           if ( $iciatom1 eq "HA2") { $iciatom1 = "HA3";}
+           if ( $iciatom1 eq "HA1") { $iciatom1 = "HA2";}
            $iciatom1;
            }
 
 sub QHBtoQB { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "QHB") { $iciatom1 = "QB";} 
+           if ( $iciatom1 eq "QHB") { $iciatom1 = "QB";}
            $iciatom1;
            }
 
 sub QHGtoQG { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "QHG") { $iciatom1 = "QG";} 
+           if ( $iciatom1 eq "QHG") { $iciatom1 = "QG";}
            $iciatom1;
            }
 
 sub QHDtoQD { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "QHD") { $iciatom1 = "QD";} 
+           if ( $iciatom1 eq "QHD") { $iciatom1 = "QD";}
            $iciatom1;
            }
 
 sub QHDtoQD1{ local ($iciatom1)=@_;
-           if ( $iciatom1 eq "QHD") { $iciatom1 = "QD1";} 
+           if ( $iciatom1 eq "QHD") { $iciatom1 = "QD1";}
            $iciatom1;
            }
 
 sub QHEtoQE { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "QHE") { $iciatom1 = "QE";} 
+           if ( $iciatom1 eq "QHE") { $iciatom1 = "QE";}
            $iciatom1;
            }
 
 sub HD1toQD1 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HD1") { $iciatom1 = "QD1";} 
-           if ( $iciatom1 eq "HD2") { $iciatom1 = "QD2";} 
+           if ( $iciatom1 eq "HD1") { $iciatom1 = "QD1";}
+           if ( $iciatom1 eq "HD2") { $iciatom1 = "QD2";}
            $iciatom1;
            }
 
 sub H26 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "2,6H") { $iciatom1 = "QD";} 
+           if ( $iciatom1 eq "2,6H") { $iciatom1 = "QD";}
            $iciatom1;
            }
 
 sub H35 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "3,5H") { $iciatom1 = "QE";} 
+           if ( $iciatom1 eq "3,5H") { $iciatom1 = "QE";}
            $iciatom1;
            }
 
 sub H4 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "4H") { $iciatom1 = "HZ";} 
+           if ( $iciatom1 eq "4H") { $iciatom1 = "HZ";}
            $iciatom1;
            }
 
 sub HAtoQA { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HA") { $iciatom1 = "QA";} 
+           if ( $iciatom1 eq "HA") { $iciatom1 = "QA";}
            $iciatom1;
            }
 
 sub HD1HD2 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HD2") { $iciatom1 = "HD3";} 
-           if ( $iciatom1 eq "HD1") { $iciatom1 = "HD2";} 
+           if ( $iciatom1 eq "HD2") { $iciatom1 = "HD3";}
+           if ( $iciatom1 eq "HD1") { $iciatom1 = "HD2";}
            $iciatom1;
            }
 
 sub HE1HE2 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HE2") { $iciatom1 = "HE3";} 
-           if ( $iciatom1 eq "HE1") { $iciatom1 = "HE2";} 
+           if ( $iciatom1 eq "HE2") { $iciatom1 = "HE3";}
+           if ( $iciatom1 eq "HE1") { $iciatom1 = "HE2";}
            $iciatom1;
            }
 sub HGtoHD21 { local ($iciatom1)=@_;
-           if ( $iciatom1 eq "HG1") { $iciatom1 = "HD21";} 
-           if ( $iciatom1 eq "HG2") { $iciatom1 = "HD22";} 
+           if ( $iciatom1 eq "HG1") { $iciatom1 = "HD21";}
+           if ( $iciatom1 eq "HG2") { $iciatom1 = "HD22";}
            $iciatom1;
            }
 
