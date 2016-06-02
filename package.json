@@ -1,0 +1,24 @@
+{
+  "name": "moulinette",
+  "version": "1.0.0",
+  "description": "Moulinette ==========",
+  "main": "./PDB/interfaceResidues.js",
+  "scripts": {
+    "start": "./PDB/interfaceResidues.js",
+    "watch": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThibWeb/moulinette.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThibWeb/moulinette/issues"
+  },
+  "homepage": "https://github.com/ThibWeb/moulinette#readme",
+  "dependencies": {
+    "lodash": "^4.13.1"
+  }
+}
