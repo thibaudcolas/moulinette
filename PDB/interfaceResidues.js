@@ -6,7 +6,7 @@ const _ = require('lodash');
 
 const aminoacidCodes = require('./aminoacidCodes.json');
 
-const INPUT_DIR = path.join('.', 'PDB', 'test');
+const INPUT_DIR = path.join('.', 'PDB', 'input');
 
 // Filename = pdbCode of a given protein.
 // key = one <pdbCode>.txt = interface residues of <pdbCode>
@@ -77,19 +77,20 @@ function createInterfaceResiduesFromFile(filename, content) {
             return seqs;
         }, []);
 
-        residuesAnalysis[chain].sequences = _.sortBy(rawSequences.filter(seq => seq.length > 1), seq => seq.length);
+        residuesAnalysis[chain].sequences = _.sortBy(rawSequences.filter(seq => seq.length > 1), seq => seq.length).reverse();
     });
 
     return residuesAnalysis;
 }
 
-function output(pdbCode, interfaceResidues) {
-    Object.keys(interfaceResidues).forEach((chain) => {
-        const residues = interfaceResidues[chain];
 
-        console.log(`>${pdbCode}_${chain}_TODO`);
+function clustalOmegaOutput(pdbCode, interfaceResidues) {
+    Object.keys(interfaceResidues).forEach((chain) => {
+        interfaceResidues[chain].sequences.forEach((seq, ind) => {
+            console.log(`>${pdbCode}_${chain}_${ind}`);
+            console.log(seq.map(res => res.resn).join(''));
+        });
     })
-    return pdbCode;
 }
 
 
@@ -99,10 +100,9 @@ readFiles(INPUT_DIR, (filename, content) => {
 
     data[pdbCode] = residues;
 
-    console.log(JSON.stringify(data, null, 4));
-    //console.log(Object.keys(data));
+    // console.log(JSON.stringify(data, null, 4));
 
-    //output(pdbCode, residues);
+    clustalOmegaOutput(pdbCode, residues);
 }, (err) => {
     throw err;
 });
