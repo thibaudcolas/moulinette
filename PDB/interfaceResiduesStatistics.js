@@ -2,10 +2,11 @@
 
 const path = require('path');
 const fs = require('fs');
+const _ = require('lodash');
 
 const aminoacidCodes = require('./aminoacidCodes.json');
 
-const INPUT_DIR = path.join('.', 'PDB', 'input');
+const INPUT_DIR = path.join('.', 'PDB', 'test');
 
 // Filename = pdbCode of a given protein.
 // key = one <pdbCode>.txt = interface residues of <pdbCode>
@@ -36,17 +37,23 @@ function readFiles(dirname, onFileContent, onError) {
 
 function createInterfaceResiduesFromFile(filename, content) {
     const lines = content
-        .split('\r\n')
+        // Remove CR for line endings in Windows.
+        .replace(/\r/g, '')
+        .split('\n')
+        .filter(line => !!line)
         .map(line => line.split(' '));
 
-    const residues = lines.reduce((chains, residue) => {
+    const residuesAnalysis = lines.reduce((chains, residue) => {
         const chain = residue[0];
 
         if (!chains[chain]) {
-            chains[chain] = [];
+            chains[chain] = {
+                residues: [],
+                sequences: [],
+            };
         }
 
-        chains[chain].push({
+        chains[chain].residues.push({
             resi: parseInt(residue[1], 10),
             resn: aminoacidCodes[residue[2]],
         });
@@ -54,7 +61,26 @@ function createInterfaceResiduesFromFile(filename, content) {
         return chains;
     }, {});
 
-    return residues;
+    Object.keys(residuesAnalysis).forEach((chain) => {
+        const rawSequences = residuesAnalysis[chain].residues.reduce((seqs, residue, index) => {
+            const lastIndex = index === 0 ? 0 : seqs.length - 1;
+            const lastSeq = seqs[lastIndex];
+
+            if (lastSeq && lastSeq[lastSeq.length - 1].resi === residue.resi - 1) {
+                lastSeq.push(residue);
+            } else {
+                const newSeq = [residue];
+
+                seqs.push(newSeq);
+            }
+
+            return seqs;
+        }, []);
+
+        residuesAnalysis[chain].sequences = _.sortBy(rawSequences.filter(seq => seq.length > 1), seq => seq.length);
+    });
+
+    return residuesAnalysis;
 }
 
 function output(pdbCode, interfaceResidues) {
