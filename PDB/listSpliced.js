@@ -1,39 +1,16 @@
 #!/usr/bin/env node
 
-const path = require('path');
-const fs = require('fs');
+const argv = require('yargs').argv;
 const _ = require('lodash');
+const utils = require('./lib/utils');
 
-const aminoacidCodes = require('./aminoacidCodes.json');
-
-const INPUT_DIR = path.join('.', 'PDB', 'input');
+const filesDir = argv._[0];
 
 // Filename = pdbCode of a given protein.
 // key = one <pdbCode>.txt = interface residues of <pdbCode>
 // value = content of <pdbCode>.txt
 // One line in the files = "Chain Resi Resn" (Residue index, Residue type)
 const data = {};
-
-function readFiles(dirname, onFileContent, onError) {
-    fs.readdir(dirname, (err, filenames) => {
-        if (err) {
-            onError(err);
-            return;
-        }
-
-        filenames.filter(filename => filename.indexOf('.txt') !== -1)
-            .forEach((filename) => {
-                fs.readFile(path.join(INPUT_DIR, filename), 'utf-8', (errDir, rawContent) => {
-                    if (errDir) {
-                        onError(errDir);
-                        return;
-                    }
-
-                    onFileContent(filename, rawContent);
-                });
-            });
-    });
-}
 
 function createInterfaceResiduesFromFile(filename, content) {
     const lines = content
@@ -55,7 +32,7 @@ function createInterfaceResiduesFromFile(filename, content) {
 
         chains[chain].residues.push({
             resi: parseInt(residue[1], 10),
-            resn: aminoacidCodes[residue[2]],
+            resn: utils.getOneLetterCode([residue[2]]),
         });
 
         return chains;
@@ -84,17 +61,7 @@ function createInterfaceResiduesFromFile(filename, content) {
 }
 
 
-function clustalOmegaOutput(pdbCode, interfaceResidues) {
-    Object.keys(interfaceResidues).forEach((chain) => {
-        interfaceResidues[chain].sequences.forEach((seq, ind) => {
-            console.log(`>${pdbCode}_${chain}_${ind}`);
-            console.log(seq.map(res => res.resn).join(''));
-        });
-    })
-}
-
-
-readFiles(INPUT_DIR, (filename, content) => {
+utils.readFiles(filesDir, (filename, content) => {
     const pdbCode = filename.replace('.txt', '');
     const residues = createInterfaceResiduesFromFile(filename, content);
 
@@ -102,7 +69,7 @@ readFiles(INPUT_DIR, (filename, content) => {
 
     // console.log(JSON.stringify(data, null, 4));
 
-    clustalOmegaOutput(pdbCode, residues);
+    utils.clustalOmegaOutput(pdbCode, residues);
 }, (err) => {
     throw err;
 });
