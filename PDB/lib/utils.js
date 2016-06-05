@@ -33,6 +33,6 @@ module.exports = {
                 console.log(`>${pdbCode}_${chain}_${ind}`);
                 console.log(seq.map(res => res.resn).join(''));
             });
-        })
+        });
     },
-}
+};
