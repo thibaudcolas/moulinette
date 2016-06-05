@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 from pymol import cmd, stored
 
 

@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
-const argv = require('yargs').argv;
+const yargs = require('yargs');
 const _ = require('lodash');
 const utils = require('./lib/utils');
 
-const filesDir = argv._[0];
+yargs.usage('Usage: $0 [directory]')
+    .demand(1)
+    .example('$0 ./PDB/store', 'Run on all txt files in ./PDB/store');
+
+const filesDir = yargs.argv._[0];
 
 // Filename = pdbCode of a given protein.
 // key = one <pdbCode>.txt = interface residues of <pdbCode>
@@ -73,7 +77,3 @@ utils.readFiles(filesDir, (filename, content) => {
 }, (err) => {
     throw err;
 });
-
-// First script: ???
-// Second script: statistics on resn
-// Third script: output amino acid sequences with "x" in gaps
