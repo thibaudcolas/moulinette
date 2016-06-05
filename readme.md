@@ -17,8 +17,8 @@ To execute the script,
 ### Interface residues analysis (PyMOL integration)
 
 ```sh
-cd PDB/pymol/
-pymol -cq interfaceResidues.py
+cd PDB/
+pymol -cq fetchAndStore.py
 ```
 
 #### Useful resources
