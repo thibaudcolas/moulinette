@@ -1,7 +1,32 @@
 const path = require('path');
 const fs = require('fs');
 
-const aminoacidCodes = require('./aminoacidCodes.json');
+const aminoacidCodes = {
+    GLY: 'G',
+    PRO: 'P',
+    ALA: 'A',
+    VAL: 'V',
+    LEU: 'L',
+    ILE: 'I',
+    MET: 'M',
+    CYS: 'C',
+    PHE: 'F',
+    TYR: 'Y',
+    TRP: 'W',
+    HIS: 'H',
+    LYS: 'K',
+    ARG: 'R',
+    GLN: 'Q',
+    ASN: 'N',
+    GLU: 'E',
+    ASP: 'D',
+    SER: 'S',
+    THR: 'T',
+    // Rare codes
+    MSE: 'M',
+    SRZ: 'S',
+    DNP: 'A',
+};
 
 module.exports = {
     getOneLetterCode: code => aminoacidCodes[code],

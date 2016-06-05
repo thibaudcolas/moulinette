@@ -1,14 +1,11 @@
-# -*- coding: UTF-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-import json
+import sys
 from lib import utils
 
 STORE_DIR = 'store'
 DATA_FILE = 'data.json'
-
-
-def load_data(file_path):
-    return json.loads(open(file_path).read())
 
 
 def generate_output(data):
@@ -19,7 +16,10 @@ def generate_output(data):
             residues = data[code][interface]['residues']
 
             for chain in interface:
-                sequence = [utils.aminoacid_codes[r['resn']] for r in residues if r['chain'] == chain]
+                try:
+                    sequence = [utils.aminoacid_codes[r['resn']] for r in residues if r['chain'] == chain]
+                except KeyError:
+                    sys.exit('Error: ' + r['resn'] + ' amino acid code not found. In ' + code)
 
                 output.append((
                     utils.get_clustal_omega_header(code, interface, chain),
@@ -29,15 +29,11 @@ def generate_output(data):
     return output
 
 
-def sort_by_sequence_length(self):
-    return len(self[1])
-
-
 def run():
-    data = load_data(STORE_DIR + '/' + DATA_FILE)
+    data = utils.load_json(STORE_DIR + '/' + DATA_FILE)
     output = generate_output(data)
 
-    output.sort(key=sort_by_sequence_length, reverse=True)
+    output.sort(key=lambda pair: len(pair[1]), reverse=True)
 
     for (header, sequence) in output:
         print header

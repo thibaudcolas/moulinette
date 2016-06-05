@@ -18,7 +18,9 @@ To execute the script,
 
 ```sh
 cd PDB/
-pymol -cq fetchAndStore.py
+pymol -cqx fetch_and_store.py
+./list.py
+./listSpliced.js <directory>
 ```
 
 #### Useful resources

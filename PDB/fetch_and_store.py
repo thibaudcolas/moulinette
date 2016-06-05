@@ -1,7 +1,9 @@
-# -*- coding: UTF-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from pymol import cmd
 from lib import interfaceResidues
+from lib import utils
 import itertools
 import json
 
@@ -14,9 +16,9 @@ def read_pdb_codes(file_path):
 
 
 def load_pdb_files(pdb_codes):
-    for code in pdb_codes:
+    for i, code in enumerate(pdb_codes):
         cmd.fetch(code)
-        print 'Loaded ' + code
+        utils.print_progress(i + 1, len(pdb_codes), prefix='Fetch ' + code + ':', barLength=50)
 
 
 def structure_data(pdb_codes):
@@ -36,7 +38,12 @@ def structure_data(pdb_codes):
 def get_residues(pdb_codes):
     data = structure_data(pdb_codes)
 
-    for code in data:
+    for code in pdb_codes:
+        cmd.delete(code)
+
+    for i, code in enumerate(data):
+        cmd.load(code + '.pdb')
+
         for interface in data[code]:
             cA = 'c. ' + interface[0]
             cB = 'c. ' + interface[1]
@@ -49,6 +56,9 @@ def get_residues(pdb_codes):
             selection = selName + ' & n. ca'
             expression = 'residues.append({ "chain": chain, "resi": resi, "resn": resn })'
             cmd.iterate(selection, expression, space=data[code][interface])
+
+        cmd.delete(code)
+        utils.print_progress(i + 1, len(data), prefix='Calc ' + code + ':', barLength=50)
 
     return data
 
