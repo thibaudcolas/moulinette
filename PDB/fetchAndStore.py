@@ -2,6 +2,7 @@ from pymol import cmd
 from lib import interfaceResidues
 
 PDB_CODES_FILE = 'pdb-codes.txt'
+RESIDUES_STORE_DIR = 'store'
 
 
 def read_pdb_codes():
@@ -11,10 +12,10 @@ def read_pdb_codes():
 pdb_codes = read_pdb_codes()
 
 
-def fetch_pdb_files():
+def load_pdb_files():
     for code in pdb_codes:
-        success = cmd.fetch(code)
-        print 'Fetched ' + success
+        cmd.fetch(code)
+        print 'Loaded ' + code
 
 
 def save_residues():
@@ -32,12 +33,10 @@ def save_residues():
         expression = 'residues.append((chain, resi, resn))'
         cmd.iterate(selection, expression, space=space)
 
-        file = open('residues/' + pdb_code + '.txt', 'w')
-        # print space['residues']
-        for residue in space['residues']:
-            file.write(' '.join(residue) + '\n')
-
+        file = open(RESIDUES_STORE_DIR + '/' + pdb_code + '.txt', 'w')
+        file_lines = [(' '.join(res) + '\n') for res in space['residues']]
+        file.write(''.join(file_lines))
         file.close()
 
-fetch_pdb_files()
+load_pdb_files()
 save_residues()
