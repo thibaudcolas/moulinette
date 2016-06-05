@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-#
+
 from pymol import cmd
 from lib import interfaceResidues
 import itertools
