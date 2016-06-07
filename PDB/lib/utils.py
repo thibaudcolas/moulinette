@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import json
+import codecs
 import sys
 
 aminoacid_codes = {
@@ -41,12 +42,18 @@ aminoacid_codes = {
 }
 
 
-def get_clustal_omega_header(code, interface, chain):
-    return ">{code}_{interface}_{chain}".format(code=code, interface=interface, chain=chain)
+def get_clustal_omega_header(fields):
+    return u'>{name}_{code}_{interface}_{chain}'.format(**fields)
 
 
 def load_json(file_path):
-    return json.loads(open(file_path).read())
+    return json.loads(codecs.open(file_path, 'r', 'utf-8').read())
+
+
+def save_json(file_path, data):
+    f = codecs.open(file_path, 'w', 'utf-8')
+    f.write(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
+    f.close()
 
 
 # http://stackoverflow.com/questions/3173320/text-progress-bar-in-the-console
@@ -68,3 +75,17 @@ def print_progress (iteration, total, prefix = '', suffix = '', decimals = 2, ba
     sys.stdout.flush()
     if iteration == total:
         print("\n")
+
+
+def read_input_line(line):
+    fields = line.rstrip('\n').split()
+
+    return {
+        'code': fields[0],
+        'name': u' '.join(fields[1:]),
+    }
+
+
+def read_input_file(file_path):
+    file = codecs.open(file_path, 'r', 'utf-8')
+    return [read_input_line(line) for line in file]

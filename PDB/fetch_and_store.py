@@ -5,46 +5,47 @@ from pymol import cmd
 from lib import interfaceResidues
 from lib import utils
 import itertools
-import json
+import codecs
 
 PDB_CODES_FILE = 'pdb-codes.txt'
 STORE_DIR = 'store'
 
 
-def read_pdb_codes(file_path):
-    return [line.rstrip('\n') for line in open(file_path)]
+def load_pdb_files(proteins):
+    for i, protein in enumerate(proteins):
+        cmd.fetch(protein['code'])
+        utils.print_progress(i + 1, len(proteins), prefix='Fetch ' + protein['code'] + ':', barLength=50)
 
 
-def load_pdb_files(pdb_codes):
-    for i, code in enumerate(pdb_codes):
-        cmd.fetch(code)
-        utils.print_progress(i + 1, len(pdb_codes), prefix='Fetch ' + code + ':', barLength=50)
-
-
-def structure_data(pdb_codes):
+def structure_data(proteins):
     data = {}
-    for code in pdb_codes:
-        data[code] = {}
+    for protein in proteins:
+        code = protein['code']
+        data[code] = {
+            'name': protein['name'],
+            'interfaces': {},
+        }
         chains = cmd.get_chains(code)
 
         for (cA, cB) in itertools.combinations(chains, 2):
             interface = cA + cB
-            data[code][interface] = {
+            data[code]['interfaces'][interface] = {
                 'residues': []
             }
     return data
 
 
-def get_residues(pdb_codes):
-    data = structure_data(pdb_codes)
+def get_residues(proteins):
+    data = structure_data(proteins)
 
-    for code in pdb_codes:
+    for protein in proteins:
+        code = protein['code']
         cmd.delete(code)
 
     for i, code in enumerate(data):
         cmd.load(code + '.pdb')
 
-        for interface in data[code]:
+        for interface in data[code]['interfaces']:
             cA = 'c. ' + interface[0]
             cB = 'c. ' + interface[1]
             selName = code + '_' + interface
@@ -55,7 +56,7 @@ def get_residues(pdb_codes):
             # but I don't know enough PyMOL to understand what is going on here.
             selection = selName + ' & n. ca'
             expression = 'residues.append({ "chain": chain, "resi": resi, "resn": resn })'
-            cmd.iterate(selection, expression, space=data[code][interface])
+            cmd.iterate(selection, expression, space=data[code]['interfaces'][interface])
 
         cmd.delete(code)
         utils.print_progress(i + 1, len(data), prefix='Calc ' + code + ':', barLength=50)
@@ -64,25 +65,23 @@ def get_residues(pdb_codes):
 
 
 def save_to_files(data):
-    dump = open(STORE_DIR + '/' + 'data.json', 'w')
-    dump.write(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
-    dump.close()
+    utils.save_json(STORE_DIR + '/' + 'data.json', data)
 
     for code in data:
-        for interface in data[code]:
+        for interface in data[code]['interfaces']:
             file_name = code + '_' + interface
-            file = open(STORE_DIR + '/' + file_name + '.txt', 'w')
-            lines = [(r['chain'] + ' ' + r['resi'] + ' ' + r['resn'] + '\n') for r in data[code][interface]['residues']]
+            file = codecs.open(STORE_DIR + '/' + file_name + '.txt', 'w', 'utf-8')
+            lines = [(r['chain'] + ' ' + r['resi'] + ' ' + r['resn'] + '\n') for r in data[code]['interfaces'][interface]['residues']]
             file.write(''.join(lines))
             file.close()
 
 
 def run():
-    pdb_codes = read_pdb_codes(PDB_CODES_FILE)
+    proteins = utils.read_input_file(PDB_CODES_FILE)
 
-    load_pdb_files(pdb_codes)
+    load_pdb_files(proteins)
 
-    data = get_residues(pdb_codes)
+    data = get_residues(proteins)
 
     save_to_files(data)
 
