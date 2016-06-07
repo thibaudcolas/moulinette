@@ -29,16 +29,15 @@ aminoacid_codes = {
     "MSE": "M",
     "SRZ": "S",
     "DNP": "A",
-	"CME": "C",
-	"MLU": "L",
-	"OMZ": "Y",
-	"MLY": "K",
-	"OMY": "Y",
-	"SEP": "S",
-	# Codes to remove
-	"GHP": "",
-	"3FG": ""
-	
+    "CME": "C",
+    "MLU": "L",
+    "OMZ": "Y",
+    "MLY": "K",
+    "OMY": "Y",
+    "SEP": "S",
+    # Codes to remove
+    "GHP": "",
+    "3FG": "",
 }
 
 
