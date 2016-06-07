@@ -4,7 +4,7 @@ import json
 import codecs
 import sys
 
-aminoacid_codes = {
+one_letter_codes = {
     "GLY": "G",
     "PRO": "P",
     "ALA": "A",
@@ -41,8 +41,15 @@ aminoacid_codes = {
 }
 
 
+def get_one_letter_code(amino_acid, pdb_code):
+    try:
+        return one_letter_codes[amino_acid]
+    except KeyError:
+        sys.exit('Error: ' + amino_acid + ' amino acid code not found. In ' + pdb_code)
+
+
 def get_clustal_omega_header(fields):
-    return u'>{name}_{code}_{interface}_{chain}'.format(**fields)
+    return u'>{name}_{code}_{interface}_{chain}{suffix}'.format(**fields)
 
 
 def load_json(file_path):

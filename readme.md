@@ -20,7 +20,7 @@ To execute the script,
 cd PDB/
 pymol -cqx fetch_and_store.py
 ./list.py
-./listSpliced.js <directory>
+./list_spiced.py
 ```
 
 #### Useful resources

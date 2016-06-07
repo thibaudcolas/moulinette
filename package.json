@@ -1,10 +1,9 @@
 {
   "name": "moulinette",
   "version": "1.0.0",
-  "description": "Moulinette ==========",
+  "description": "Moulinette",
   "main": "readme.md",
   "scripts": {
-    "watch": "nodemon"
   },
   "repository": {
     "type": "git",
@@ -18,7 +17,5 @@
   },
   "homepage": "https://github.com/ThibWeb/moulinette#readme",
   "dependencies": {
-    "lodash": "^4.13.1",
-    "yargs": "^4.7.1"
   }
 }

@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 from lib import utils
 
 STORE_DIR = 'store'
@@ -22,10 +21,7 @@ def generate_output(data):
             residues = data[code]['interfaces'][interface]['residues']
 
             for chain in interface:
-                try:
-                    sequence = [utils.aminoacid_codes[r['resn']] for r in residues if r['chain'] == chain]
-                except KeyError:
-                    sys.exit('Error: ' + r['resn'] + ' amino acid code not found. In ' + code)
+                sequence = [utils.get_one_letter_code(r['resn'], code) for r in residues if r['chain'] == chain]
 
                 output.append((
                     utils.get_clustal_omega_header({
