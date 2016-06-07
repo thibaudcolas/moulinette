@@ -27,7 +27,17 @@ aminoacid_codes = {
     # Rare codes
     "MSE": "M",
     "SRZ": "S",
-    "DNP": "A"
+    "DNP": "A",
+	"CME": "C",
+	"MLU": "L",
+	"OMZ": "Y",
+	"MLY": "K",
+	"OMY": "Y",
+	"SEP": "S",
+	# Codes to remove
+	"GHP": "",
+	"3FG": ""
+	
 }
 
 
