@@ -1,0 +1,12 @@
+language: python
+python:
+- "2.7"
+# command to install dependencies
+install:
+- apt-get install pymol
+# command to run tests
+script:
+- cd PDB/
+- pymol -cqx fetch_and_store.py
+- ./list.py
+- ./list_spiced.py
