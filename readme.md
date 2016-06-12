@@ -1,4 +1,4 @@
-moulinette
+moulinette [![Build Status](https://travis-ci.org/ThibWeb/moulinette.svg?branch=master)](https://travis-ci.org/ThibWeb/moulinette)
 ==========
 
 > A collection of scripts related to biochemistry.
