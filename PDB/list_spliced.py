@@ -55,7 +55,7 @@ def generate_output(data):
     return output
 
 
-def run():
+def main():
     data = utils.load_json(STORE_DIR + '/' + DATA_FILE)
     output = generate_output(data)
 
@@ -65,4 +65,6 @@ def run():
         print header.encode('utf-8')
         print sequence.encode('utf-8')
 
-run()
+
+if __name__ == "__main__":
+    main()

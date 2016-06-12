@@ -76,7 +76,7 @@ def save_to_files(data):
             file.close()
 
 
-def run():
+def main():
     proteins = utils.read_input_file(PDB_CODES_FILE)
 
     load_pdb_files(proteins)
@@ -86,4 +86,5 @@ def run():
     save_to_files(data)
 
 
-run()
+if __name__ == "__main__":
+    main()
