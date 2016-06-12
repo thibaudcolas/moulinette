@@ -56,7 +56,7 @@ def generate_output(data):
 
 
 def main():
-    data = utils.load_json(STORE_DIR + '/' + DATA_FILE)
+    data = utils.load_json(utils.get_json_path(__file__))
     output = generate_output(data)
 
     output.sort(key=lambda pair: len(pair[1]), reverse=True)

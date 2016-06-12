@@ -3,6 +3,9 @@
 import json
 import codecs
 import sys
+import os
+
+DATA_FILE = 'data.json'
 
 one_letter_codes = {
     "GLY": "G",
@@ -50,6 +53,15 @@ def get_one_letter_code(amino_acid, pdb_code):
 
 def get_clustal_omega_header(fields):
     return u'>{name}_{code}_{interface}_{chain}{suffix}'.format(**fields)
+
+
+def get_json_path(file):
+    args = sys.argv[1:]
+    return os.path.join(args[0], DATA_FILE) if len(args) > 0 else get_default_json_path(file)
+
+
+def get_default_json_path(file):
+    return os.path.join(os.path.dirname(file), 'store', DATA_FILE)
 
 
 def load_json(file_path):
