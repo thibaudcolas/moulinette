@@ -6,9 +6,12 @@ from lib import interfaceResidues
 from lib import utils
 import itertools
 import codecs
+import sys
+import os
 
-PDB_CODES_FILE = 'pdb-codes.txt'
-STORE_DIR = 'store'
+CWD = os.getcwd()
+STORE_DIR = os.path.join(CWD, 'store')
+CODES_FILE = os.path.join(CWD, 'pdb-codes.txt')
 
 
 def load_pdb_files(proteins):
@@ -77,14 +80,14 @@ def save_to_files(data):
 
 
 def main():
-    proteins = utils.read_input_file(PDB_CODES_FILE)
+    args = sys.argv[3:]
+    codes_file = args[0] if len(args) > 0 else CODES_FILE
 
+    proteins = utils.read_input_file(codes_file)
     load_pdb_files(proteins)
-
     data = get_residues(proteins)
 
     save_to_files(data)
 
 
-if __name__ == "__main__":
-    main()
+main()
