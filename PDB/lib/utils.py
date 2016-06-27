@@ -6,6 +6,7 @@ import sys
 import os
 
 DATA_FILE = 'data.json'
+CONFIG_FILE = 'config.json'
 
 one_letter_codes = {
     "GLY": "G",
@@ -55,23 +56,50 @@ def get_clustal_omega_header(fields):
     return u'>{name}_{code}_{interface}_{chain}{suffix}'.format(**fields)
 
 
-def get_json_path(file):
+def get_data_path(file):
     args = sys.argv[1:]
-    return os.path.join(args[0], DATA_FILE) if len(args) > 0 else get_default_json_path(file)
+    return os.path.join(args[0], DATA_FILE) if len(args) > 0 else os.path.join(os.path.dirname(file), 'store', DATA_FILE)
 
 
-def get_default_json_path(file):
-    return os.path.join(os.path.dirname(file), 'store', DATA_FILE)
+def get_config_path(file):
+    args = sys.argv[1:]
+    return os.path.join(args[0], CONFIG_FILE) if len(args) > 0 and 'pymol' not in sys.argv[0] else os.path.join(os.path.dirname(file), 'store', CONFIG_FILE)
 
 
 def load_json(file_path):
     return json.loads(codecs.open(file_path, 'r', 'utf-8').read())
 
 
+def load_data(file_path):
+    return load_json(get_data_path(file_path))
+
+
+def load_config(file_path):
+    return load_json(get_config_path(file_path))
+
+
 def save_json(file_path, data):
     f = codecs.open(file_path, 'w', 'utf-8')
     f.write(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
     f.close()
+
+
+def init_config(data):
+    config = {
+        'active': {},
+    }
+
+    for code in data:
+        config['active'][code] = {}
+        for interface in data[code]['interfaces']:
+            config['active'][code][interface] = True
+
+    return config
+
+
+def generate_config(file_path, data):
+    config = init_config(data)
+    save_json(get_config_path(file_path), config)
 
 
 # http://stackoverflow.com/questions/3173320/text-progress-bar-in-the-console

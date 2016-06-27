@@ -67,7 +67,7 @@ def get_residues(proteins):
     return data
 
 
-def save_to_files(data):
+def save_data(data):
     utils.save_json(STORE_DIR + '/' + 'data.json', data)
 
     for code in data:
@@ -87,7 +87,9 @@ def main():
     load_pdb_files(proteins)
     data = get_residues(proteins)
 
-    save_to_files(data)
+    save_data(data)
+
+    utils.generate_config('config.json', data)
 
 
 main()
