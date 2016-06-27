@@ -19,8 +19,10 @@ To execute the script,
 ```sh
 cd PDB/
 pymol -cqx fetch_and_store.py
+./generate_config.py
 ./list.py
 ./list_spiced.py
+./resn_statistics.py
 ```
 
 #### Useful resources
