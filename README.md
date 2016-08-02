@@ -3,18 +3,17 @@ moulinette [![Build Status](https://travis-ci.org/ThibWeb/moulinette.svg?branch=
 
 > A collection of scripts related to biochemistry.
 
-## [PDB (Protein Data Bank)](http://www.rcsb.org/pdb/home/home.do) collection
-
-### Interface residues analysis (node POC)
-
-To execute the script,
-
-1. Download a [ZIP of this repository](https://github.com/ThibWeb/moulinette/archive/master.zip)
-2. TODO
-
 ## [NMR (Nuclear Magnetic Resonance)](https://en.wikibooks.org/wiki/Structural_Biochemistry/Proteins/NMR_Spectroscopy) collection
 
+TODO
+
+## [PDB (Protein Data Bank)](http://www.rcsb.org/pdb/home/home.do) collection
+
 ### Interface residues analysis (PyMOL integration)
+
+To execute the scripts,
+
+1. Download a [ZIP of this repository](https://github.com/ThibWeb/moulinette/archive/master.zip)
 
 ```sh
 cd PDB/
@@ -23,6 +22,7 @@ pymol -cqx fetch_and_store.py
 ./list.py
 ./list_spiced.py
 ./resn_statistics.py
+./PDB/green_statistics.py ./PDB/test/green_fastas.txt ./PDB/test/green_IR.txt
 ```
 
 #### Useful resources
