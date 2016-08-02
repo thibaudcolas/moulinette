@@ -49,21 +49,69 @@ def main():
             'CHAIN_LENGTH_FASTAS',
             'CHAIN_LENGTH_IR',
         ]
+
+        dynamic_fieldnames = [
+            'NB_{code}_FASTAS',
+            'NB_{code}_IR',
+            '%_{code}_CHAIN',
+            '%_{code}_IR_VS_CHAIN',
+            '%_{code}_IR_VS_IR',
+            '%_{code}_IR_VS_CHAIN_WEIGHTED',
+        ]
+
+        for code in utils.one_letter_codes.values():
+            if code:
+                for field in dynamic_fieldnames:
+                    fieldnames.append(field.format(code=code))
+
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
 
         for pdb_code in fastas_chains:
             for chain in fastas_chains[pdb_code]:
-                length_fastas = len(fastas_chains[pdb_code][chain])
-                length_ir = len(ir_chains[pdb_code][chain])
+                sequence = fastas_chains[pdb_code][chain]
+                interface_residues = ir_chains[pdb_code][chain]
 
-                writer.writerow({
+                fields = {
+                    # 1. PDB code of the protein.
                     'PDB_CODE': pdb_code,
+                    # 2. One-letter code of the chain.
                     'CHAINAME': chain,
-                    'CHAIN_LENGTH_FASTAS': length_fastas,
-                    'CHAIN_LENGTH_IR': length_ir,
-                })
+                    # 3. Length of sequence in fastas file.
+                    'CHAIN_LENGTH_FASTAS': len(sequence),
+                    # 4. Length of interface residues in IR file.
+                    'CHAIN_LENGTH_IR': len(interface_residues),
+                }
+
+                for code in utils.one_letter_codes.values():
+                    if code:
+                        dynamic_fields = {}
+
+                        # Colonne 5: Nombre de A dans fastas
+                        # 5. Number of {code} in sequence.
+                        dynamic_fields['NB_{code}_FASTAS'] = float(sequence.count(code))
+                        # Colonne 6: Nombre de A dans IR
+                        # 6. Number of {code} in interface residues.
+                        dynamic_fields['NB_{code}_IR'] = float(interface_residues.count(code))
+
+                        # Colonne 7: Ratio colonne 5 / colonne 3
+                        # 7. Proportion of {code} in sequence to sequence length.
+                        dynamic_fields['%_{code}_CHAIN'] = 100 * dynamic_fields['NB_{code}_FASTAS'] / fields['CHAIN_LENGTH_FASTAS']
+                        # Colonne 8: Ratio colonne 6 / colonne 3
+                        # 8. Proportion of {code} in interface residues to sequence length.
+                        dynamic_fields['%_{code}_IR_VS_CHAIN'] = 100 * dynamic_fields['NB_{code}_IR'] / fields['CHAIN_LENGTH_FASTAS']
+                        # Colonne 9: Ratio colonne 6 / colonne 4
+                        # 9. Proportion of {code} in interface residues to interface residues length.
+                        dynamic_fields['%_{code}_IR_VS_IR'] = 100 * dynamic_fields['NB_{code}_IR'] / fields['CHAIN_LENGTH_IR']
+                        # Colonne 10: Ratio colonne 6 / colonne 5
+                        # 10. Weighted proportion of {code} in interface residues to number of {code} in sequence.
+                        dynamic_fields['%_{code}_IR_VS_CHAIN_WEIGHTED'] = 100 * dynamic_fields['NB_{code}_IR'] / dynamic_fields['NB_{code}_FASTAS']
+
+                        for field in dynamic_fields:
+                            fields[field.format(code=code)] = dynamic_fields[field]
+
+                writer.writerow(fields)
 
 
 if __name__ == "__main__":
