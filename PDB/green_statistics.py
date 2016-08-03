@@ -59,7 +59,7 @@ def main():
             '%_{code}_IR_VS_CHAIN_WEIGHTED',
         ]
 
-        for code in utils.one_letter_codes.values():
+        for code in utils.standard_one_letter_codes.values():
             if code:
                 for field in dynamic_fieldnames:
                     fieldnames.append(field.format(code=code))
@@ -84,7 +84,7 @@ def main():
                     'CHAIN_LENGTH_IR': len(interface_residues),
                 }
 
-                for code in utils.one_letter_codes.values():
+                for code in utils.standard_one_letter_codes.values():
                     if code:
                         dynamic_fields = {}
 

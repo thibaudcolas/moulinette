@@ -8,6 +8,29 @@ import os
 DATA_FILE = 'data.json'
 CONFIG_FILE = 'config.json'
 
+standard_one_letter_codes = {
+    "GLY": "G",
+    "PRO": "P",
+    "ALA": "A",
+    "VAL": "V",
+    "LEU": "L",
+    "ILE": "I",
+    "MET": "M",
+    "CYS": "C",
+    "PHE": "F",
+    "TYR": "Y",
+    "TRP": "W",
+    "HIS": "H",
+    "LYS": "K",
+    "ARG": "R",
+    "GLN": "Q",
+    "ASN": "N",
+    "GLU": "E",
+    "ASP": "D",
+    "SER": "S",
+    "THR": "T",
+}
+
 one_letter_codes = {
     "GLY": "G",
     "PRO": "P",
