@@ -1,4 +1,4 @@
-moulinette [![Build Status](https://travis-ci.org/ThibWeb/moulinette.svg?branch=master)](https://travis-ci.org/ThibWeb/moulinette)
+moulinette [![Build Status](https://travis-ci.org/thibaudcolas/moulinette.svg?branch=master)](https://travis-ci.org/thibaudcolas/moulinette)
 ==========
 
 > A collection of scripts related to biochemistry.
@@ -13,7 +13,7 @@ TODO
 
 To execute the scripts,
 
-1. Download a [ZIP of this repository](https://github.com/ThibWeb/moulinette/archive/master.zip)
+1. Download a [ZIP of this repository](https://github.com/thibaudcolas/moulinette/archive/master.zip)
 
 ```sh
 cd PDB/
