@@ -13,5 +13,11 @@ svn co --quiet svn://svn.code.sf.net/p/pymol/code/trunk/pymol $prefix/$svnpymol
 cd $prefix/$svnpymol
 python setup.py build install --home=$prefix --install-lib=$modules --install-scripts=$prefix
 
-export PATH="$prefix:$PATH"
+export PATH="$prefix:$modules:$modules/pymol/pymol_path/scripts:$PATH"
 export PYMOL_PATH="$modules"
+
+ls $prefix
+ls $modules
+ls $modules/pymol/pymol_path/scripts
+ls $modules/pymol/pymol_path
+tree $prefix || echo ok
