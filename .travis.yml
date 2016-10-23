@@ -5,11 +5,14 @@ python:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y pymol
+before_script:
+  - which pymol
+  - PYMOL_PATH=$(which pymol)
 script:
 - cd PDB/
 - pymol -cqx fetch_and_store.py
-- "./list.py"
-- "./list_spiced.py"
+- ./list.py
+- ./list_spiced.py
 notifications:
   email: false
   slack:
