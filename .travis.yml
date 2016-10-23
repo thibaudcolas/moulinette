@@ -6,9 +6,6 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y subversion build-essential python-dev python-pmw libglew-dev freeglut3-dev libpng-dev libfreetype6-dev libxml2-dev
   - ./bin/pymol-install.sh
-before_script:
-  - which pymol
-  - PYMOL_PATH=$(which pymol)
 script:
 - cd PDB/
 - pymol -cqx fetch_and_store.py

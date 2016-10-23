@@ -15,5 +15,3 @@ python setup.py build install --home=$prefix --install-lib=$modules --install-sc
 
 export PATH="$prefix:$PATH"
 export PYMOL_PATH="$modules"
-ls "$prefix"
-ls "$modules"
