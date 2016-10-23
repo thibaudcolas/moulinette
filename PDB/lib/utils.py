@@ -150,7 +150,7 @@ def read_input_line(line):
     fields = line.rstrip('\n').split()
 
     return {
-        'code': fields[0],
+        'code': fields[0].lower(),
         'name': u' '.join(fields[1:]),
     }
 
