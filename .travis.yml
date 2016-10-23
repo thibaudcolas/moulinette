@@ -1,13 +1,16 @@
+sudo: true
 language: python
 python:
 - '2.7'
-install:
-- apt-get install pymol
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y pymol
 script:
 - cd PDB/
 - pymol -cqx fetch_and_store.py
 - "./list.py"
 - "./list_spiced.py"
 notifications:
+  email: false
   slack:
     secure: AVocSfmm1n77FRYHwPnedelh8cZiDIGQVTEEDfs6F1GlMEVsMP3EEnhpDYvHv1aLMvzz2q9KO1Jg+7V24PC78VNkgFBJfdo/kqM34hoOOT8Ya+mI435os3mXLSp7f1wcjWBvUxo2OEHWG0vT7iBfnH/ZQIAn8gGxz8QKC9I7wdY=
