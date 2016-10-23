@@ -16,8 +16,4 @@ python setup.py build install --home=$prefix --install-lib=$modules --install-sc
 export PATH="$prefix:$modules:$PATH"
 export PYMOL_PATH="$modules"
 
-sudo ln -s "$prefix/pymol" /usr/bin/pymol
-
-ls -l $prefix
-ls -l $modules
 which pymol || echo ok

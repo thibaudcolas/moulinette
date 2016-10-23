@@ -4,4 +4,3 @@ node_modules
 *.pyc
 */store/*.txt
 */store/*.json
-PDB/*.txt
