@@ -2,6 +2,9 @@ sudo: true
 language: python
 python:
 - '2.7'
+cache:
+  directories:
+    - pymol
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y subversion build-essential python-dev python-pmw libglew-dev freeglut3-dev libpng-dev libfreetype6-dev libxml2-dev
